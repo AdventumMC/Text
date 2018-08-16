@@ -8,7 +8,7 @@ package fr.shyrogan.utilities.text.font;
 public final class Font {
 
     // Default's chat length.
-    public static final int CHAT_LENGTH = 152;
+    public static final int HALF_CHAT_LENGTH = 152;
 
     /**
      * Returns Minecraft's Text length.

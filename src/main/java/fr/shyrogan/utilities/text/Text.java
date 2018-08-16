@@ -1,5 +1,6 @@
 package fr.shyrogan.utilities.text;
 
+import com.sun.corba.se.impl.oa.toa.TOAFactory;
 import fr.shyrogan.utilities.text.font.Font;
 import fr.shyrogan.utilities.text.font.FontInfos;
 import net.md_5.bungee.api.ChatColor;
@@ -66,6 +67,12 @@ public final class Text {
     private Text(BaseComponent text) {
         // We load our text
         this.text = text;
+        this.text.setColor(ChatColor.RESET);
+        this.text.setBold(false);
+        this.text.setItalic(false);
+        this.text.setStrikethrough(false);
+        this.text.setUnderlined(false);
+        this.text.setObfuscated(false);
     }
 
     public Text color(Collection<ChatColor> colors) {
@@ -84,16 +91,12 @@ public final class Text {
                     text.setStrikethrough(true);
                 } else if (c == ChatColor.BOLD) {
                     text.setBold(true);
-                    return this;
                 } else if (c == ChatColor.ITALIC) {
                     text.setItalic(true);
-                    return this;
                 } else if (c == ChatColor.UNDERLINE) {
                     text.setUnderlined(true);
-                    return this;
                 } else if (c == ChatColor.MAGIC) {
                     text.setObfuscated(true);
-                    return this;
                 }
                 text.setColor(c);
             }
@@ -198,16 +201,22 @@ public final class Text {
     public Text center(char padding, Text seperator, ChatColor... colors) {
         List<ChatColor> listColors = Arrays.asList(colors);
         // Let's calculate the place we need to fill, represents only one side.
-        int TO_FILL = (Font.CHAT_LENGTH - getLength() - seperator.getLength() * 2) / 2;
+        int TO_FILL = Font.HALF_CHAT_LENGTH - (getLength() + seperator.getLength() * 2) / 2;
         int FILLED = 0;
         final FontInfos paddingInfos = FontInfos.getFontInfo(padding);
         final StringBuilder builder = new StringBuilder();
 
         while (FILLED < TO_FILL) {
+            int charLength = listColors.contains(ChatColor.STRIKETHROUGH) ?
+                    FontInfos.STRIKETHOUGH_LENGTH + 1 : listColors.contains(ChatColor.BOLD) ?
+                    paddingInfos.getBoldLength() + 1 : paddingInfos.getLength() + 1;
+
+            if(FILLED + charLength > TO_FILL) {
+                FILLED = TO_FILL;
+                break;
+            }
+            FILLED += charLength;
             builder.append(padding);
-            FILLED += listColors.contains(ChatColor.STRIKETHROUGH) ?
-                    FontInfos.STRIKETHOUGH_LENGTH : listColors.contains(ChatColor.BOLD) ?
-                    paddingInfos.getBoldLength() : paddingInfos.getLength();
         }
         final Text fill = Text.of(builder.toString()).color(colors);
 
