@@ -1,5 +1,0 @@
-name: TextTest
-description: Just a test plugin.
-version: 1
-author: Shyrogan
-main: fr.shyrogan.texttest.TextTest

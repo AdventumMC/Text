@@ -1,10 +1,13 @@
 package fr.shyrogan.utilities.text;
 
 import fr.shyrogan.utilities.text.font.Font;
+import fr.shyrogan.utilities.text.font.FontInfos;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.*;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Text is an utility tool allowing you to make complete messages.
@@ -63,6 +66,10 @@ public final class Text {
     private Text(BaseComponent text) {
         // We load our text
         this.text = text;
+    }
+
+    public Text color(Collection<ChatColor> colors) {
+        return color(colors.toArray(new ChatColor[] {}));
     }
 
     /**
@@ -157,6 +164,62 @@ public final class Text {
      */
     public boolean isItalic() {
         return isSingle() && text.isItalic();
+    }
+
+    /**
+     * Sets an event when the message is clicked.
+     *
+     * @param event Event
+     */
+    public Text setClickEvent(ClickEvent event) {
+        if(isSingle()) {
+            text.setClickEvent(event);
+        }
+        return this;
+    }
+
+    /**
+     * Sets an event when the message is hovered.
+     *
+     * @param event Event
+     */
+    public Text setHoverEvent(HoverEvent event) {
+        if(isSingle()) {
+            text.setHoverEvent(event);
+        }
+        return this;
+    }
+
+    /**
+     * Converts the text into a builder if it's not already and centers it
+     * using specified character. It can also use a seperator to seperate the text
+     * & the character centering it.
+     */
+    public Text center(char padding, Text seperator, ChatColor... colors) {
+        List<ChatColor> listColors = Arrays.asList(colors);
+        // Let's calculate the place we need to fill, represents only one side.
+        int TO_FILL = (Font.CHAT_LENGTH - getLength() - seperator.getLength() * 2) / 2;
+        int FILLED = 0;
+        final FontInfos paddingInfos = FontInfos.getFontInfo(padding);
+        final StringBuilder builder = new StringBuilder();
+
+        while (FILLED < TO_FILL) {
+            builder.append(padding);
+            FILLED += listColors.contains(ChatColor.STRIKETHROUGH) ?
+                    FontInfos.STRIKETHOUGH_LENGTH : listColors.contains(ChatColor.BOLD) ?
+                    paddingInfos.getBoldLength() : paddingInfos.getLength();
+        }
+        final Text fill = Text.of(builder.toString()).color(colors);
+
+        return Text.builder()
+                // Beginning
+                .append(fill)
+                .append(seperator)
+                // Actual text (centered)
+                .append(this)
+                // End
+                .append(seperator)
+                .append(fill);
     }
 
     /**
