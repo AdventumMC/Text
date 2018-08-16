@@ -1,4 +1,4 @@
-package fr.shyrogan.utilities.text.fonts;
+package fr.shyrogan.utilities.text.font;
 
 /**
  * I did some changes inside of this class to make it
@@ -110,6 +110,7 @@ public enum FontInfos {
             "ÀàÈèÌìÒòÙùÁáÉéÍíÓóÚúÝýÂâÊêÎîÔôÛûŶŷÃãÕõÑñÄäËëÏïÖöÜüŸÿÅåÇçŐőŰű";
     private static final String PLAIN_ASCII =
             "AaEeIiOoUuAaEeIiOoUuYyAaEeIiOoUuYyAaOoNnAaEeIiOoUuYyAaCcOoUu";
+    public static int STRIKETHOUGH_LENGTH = 6;
 
     private char character;
     private int length;
@@ -138,15 +139,6 @@ public enum FontInfos {
     }
 
     /**
-     * This is a constant. It nevers change.
-     *
-     * @return Strikethough length.
-     */
-    public int getStrikethoughLength() {
-        return 6;
-    }
-
-    /**
      * Gets bold length of that Text.
      *
      * @return Bold Length
@@ -158,6 +150,7 @@ public enum FontInfos {
 
     /**
      * Gets FontInfo of a character.
+     *
      * I did a little modification to remove accents and make
      * less miscalculations.
      *
