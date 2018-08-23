@@ -4,7 +4,7 @@ import fr.shyrogan.utilities.text.font.Font;
 import fr.shyrogan.utilities.text.font.FontInfos;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -274,7 +274,7 @@ public final class Text {
      *
      * @param player Player
      */
-    public void send(Player player) {
+    public void send(CommandSender player) {
         player.spigot().sendMessage(create());
     }
 
@@ -283,7 +283,7 @@ public final class Text {
      *
      * @param players Players
      */
-    public void send(Iterable<? extends Player> players) {
+    public void send(Iterable<? extends CommandSender> players) {
         players.forEach(this::send);
     }
 
