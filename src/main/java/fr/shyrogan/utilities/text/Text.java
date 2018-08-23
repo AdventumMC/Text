@@ -1,6 +1,5 @@
 package fr.shyrogan.utilities.text;
 
-import com.sun.corba.se.impl.oa.toa.TOAFactory;
 import fr.shyrogan.utilities.text.font.Font;
 import fr.shyrogan.utilities.text.font.FontInfos;
 import net.md_5.bungee.api.ChatColor;
@@ -10,7 +9,6 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Text is an utility tool allowing you to make complete messages.
