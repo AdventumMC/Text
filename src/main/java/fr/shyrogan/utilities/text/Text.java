@@ -5,10 +5,12 @@ import fr.shyrogan.utilities.text.font.Font;
 import fr.shyrogan.utilities.text.font.FontInfos;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Text is an utility tool allowing you to make complete messages.
@@ -267,6 +269,24 @@ public final class Text {
      */
     public BaseComponent[] create() {
         return isSingle() ? new BaseComponent[] { text } : builder.create();
+    }
+
+    /**
+     * Sends the message to a player.
+     *
+     * @param player Player
+     */
+    public void send(Player player) {
+        player.spigot().sendMessage(create());
+    }
+
+    /**
+     * Sends the message to an collection of players.
+     *
+     * @param players Players
+     */
+    public void send(Iterable<? extends Player> players) {
+        players.forEach(this::send);
     }
 
 }
