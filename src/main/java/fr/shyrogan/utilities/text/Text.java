@@ -1,5 +1,6 @@
 package fr.shyrogan.utilities.text;
 
+import com.google.common.base.MoreObjects;
 import fr.shyrogan.utilities.text.font.Font;
 import fr.shyrogan.utilities.text.font.FontInfos;
 import net.md_5.bungee.api.ChatColor;
@@ -9,25 +10,26 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Text is an utility tool allowing you to make complete messages.
- * They make manipulation of BaseComponent from Spigot easier.
- *
- * It is a modernized version Spigot's Font Components.
- *
- * It also allows some more complex informations like Centering/Length calculating.
+ * Text is an utility tool allowing you to make complete messages, they make manipulation of
+ * BaseComponent from Spigot easier.
+ * It also allows some more complex manipulation like centering/length calcuation.
+ * This is for sure not a optimized as it should be, but I'm (Shyrogan) bad at text manipulation.
  *
  * @author Sébastien (Shyrogan)
  */
 public final class Text {
+
+    public static Text EMPTY = Text.of("");
 
     /**
      * Creates an empty Text.
      *
      * @return Text
      */
-    public static Text builder() {
+    static Text builder() {
         return new Text(new ComponentBuilder(""));
     }
 
@@ -144,7 +146,7 @@ public final class Text {
      * @return True if strikethrough.
      */
     public boolean isStrikethrough() {
-        return isSingle() && text.isStrikethrough();
+        return isSingle() ? text.isStrikethrough() : Arrays.stream(builder.create()).allMatch(BaseComponent::isStrikethrough);
     }
 
     /**
@@ -155,7 +157,7 @@ public final class Text {
      * @return True if obfuscated.
      */
     public boolean isObfuscated() {
-        return isSingle() && text.isObfuscated();
+        return isSingle() ? text.isObfuscated() : Arrays.stream(builder.create()).allMatch(BaseComponent::isObfuscated);
     }
 
     /**
@@ -166,7 +168,18 @@ public final class Text {
      * @return True if italic.
      */
     public boolean isItalic() {
-        return isSingle() && text.isItalic();
+        return isSingle() ? text.isItalic() : Arrays.stream(builder.create()).allMatch(BaseComponent::isItalic);
+    }
+
+    /**
+     * Check if our text is bold. This method only works with a single
+     * Text.
+     * @see this#isSingle()
+     *
+     * @return True if bold.
+     */
+    public boolean isBold() {
+        return isSingle() ? text.isBold() : Arrays.stream(builder.create()).allMatch(BaseComponent::isBold);
     }
 
     /**
@@ -232,17 +245,6 @@ public final class Text {
     }
 
     /**
-     * Check if our text is bold. This method only works with a single
-     * Text.
-     * @see this#isSingle()
-     *
-     * @return True if bold.
-     */
-    public boolean isBold() {
-        return isSingle() && text.isBold();
-    }
-
-    /**
      * Checks if our Text is composed of a single text.
      *
      * @return True if composed of a single text.
@@ -258,6 +260,15 @@ public final class Text {
      */
     public boolean isMultiple() {
         return builder != null;
+    }
+
+    /**
+     * Checks if the Text is empty.
+     *
+     * @return True if empty.
+     */
+    public boolean isEmpty() {
+        return isSingle() ? text.toPlainText().isEmpty() : Arrays.stream(builder.create()).map(BaseComponent::toPlainText).allMatch(String::isEmpty);
     }
 
     /**
@@ -287,4 +298,17 @@ public final class Text {
         players.forEach(this::send);
     }
 
+    @Override
+    public String toString() {
+        if(isSingle())
+            return MoreObjects.toStringHelper(this)
+                        .add("text", text.toString())
+                        .toString();
+
+        return MoreObjects.toStringHelper(this)
+                .add("texts", Arrays.stream(builder.create())
+                        .map(BaseComponent::toString)
+                        .collect(Collectors.joining(", ")))
+                .toString();
+    }
 }
