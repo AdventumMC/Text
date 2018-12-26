@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.command.CommandSender;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author Sébastien (Shyrogan)
  */
-public final class Text {
+public final class Text implements Serializable {
 
     public static Text EMPTY = Text.of("");
 
