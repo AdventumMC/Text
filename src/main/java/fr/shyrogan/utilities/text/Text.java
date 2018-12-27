@@ -269,7 +269,8 @@ public final class Text implements Serializable {
      * @return True if empty.
      */
     public boolean isEmpty() {
-        return isSingle() ? text.toPlainText().isEmpty() : Arrays.stream(builder.create()).map(BaseComponent::toPlainText).allMatch(String::isEmpty);
+        // https://stackoverflow.com/questions/33621060/invalid-method-reference-ambiguous-reference-javac-ecj-behaviour-difference
+        return isSingle() ? text.toPlainText().isEmpty() : Arrays.stream(builder.create()).map(baseComponent -> baseComponent.toPlainText()).allMatch(s -> s.isEmpty());
     }
 
     /**
